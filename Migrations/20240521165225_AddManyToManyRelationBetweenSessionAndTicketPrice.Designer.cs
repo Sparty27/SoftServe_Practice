@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SoftServe_Practice.Data;
 
@@ -11,9 +12,11 @@ using SoftServe_Practice.Data;
 namespace SoftServe_Practice.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240521165225_AddManyToManyRelationBetweenSessionAndTicketPrice")]
+    partial class AddManyToManyRelationBetweenSessionAndTicketPrice
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,7 +92,7 @@ namespace SoftServe_Practice.Migrations
 
                     b.HasIndex("TicketPriceId");
 
-                    b.ToTable("SessionTicketPrices");
+                    b.ToTable("SessionTicketPrice");
                 });
 
             modelBuilder.Entity("SoftServe_Practice.Models.TicketPrice", b =>

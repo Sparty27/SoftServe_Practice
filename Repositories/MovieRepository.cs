@@ -45,5 +45,13 @@ namespace SoftServe_Practice.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<IEnumerable<Movie>> GetNewReleasesAsync()
+        {
+            var oneMonthAgo = DateTime.Now.AddMonths(-1);
+            return await _context.Movies
+                .Where(m => m.ReleaseDate >= oneMonthAgo)
+                .ToListAsync();
+        }
     }
 }

@@ -6,6 +6,7 @@ namespace SoftServe_Practice.Repositories.Interfaces
     {
         Task<IEnumerable<Session>> GetSessionsAsync();
         Task<Session> GetSessionByIdAsync(int id);
+        Task<IEnumerable<Session>> GetSessionsByFilterAsync(DateTime? startDate, DateTime? endDate, string genre);
         Task AddSessionAsync(Session session);
         Task UpdateSessionAsync(Session session);
         Task DeleteSessionAsync(int id);

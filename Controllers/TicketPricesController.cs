@@ -33,9 +33,13 @@ namespace SoftServe_Practice.Controllers
             return Ok(ticketPrice);
         }
 
-        [HttpPost]
+        [HttpPost("CreateTicketPrice")]
         public async Task<ActionResult> AddTicketPrice(TicketPrice ticketPrice)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             await _ticketPriceRepository.AddTicketPriceAsync(ticketPrice);
             return CreatedAtAction(nameof(GetTicketPrice), new { id = ticketPrice.Id }, ticketPrice);
         }
@@ -43,6 +47,10 @@ namespace SoftServe_Practice.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateTicketPrice(int id, TicketPrice ticketPrice)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             if (id != ticketPrice.Id)
             {
                 return BadRequest();

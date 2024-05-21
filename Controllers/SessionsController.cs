@@ -18,44 +18,90 @@ namespace SoftServe_Practice.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Session>>> GetSessions()
         {
-            var sessions = await _sessionRepository.GetSessionsAsync();
-            return Ok(sessions);
+            try
+            {
+                var sessions = await _sessionRepository.GetSessionsAsync();
+                return Ok(sessions);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Session>> GetSession(int id)
         {
-            var session = await _sessionRepository.GetSessionByIdAsync(id);
-            if (session == null)
+            try
             {
-                return NotFound();
+                var session = await _sessionRepository.GetSessionByIdAsync(id);
+                if (session == null)
+                {
+                    return NotFound();
+                }
+                return Ok(session);
             }
-            return Ok(session);
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
-        [HttpPost]
+        [HttpGet("filter")]
+        public async Task<ActionResult<IEnumerable<Session>>> GetSessionsByFilter([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] string genre)
+        {
+            var sessions = await _sessionRepository.GetSessionsByFilterAsync(startDate, endDate, genre);
+            return Ok(sessions);
+        }
+
+        [HttpPost("CreateSession")]
         public async Task<ActionResult> AddSession(Session session)
         {
-            await _sessionRepository.AddSessionAsync(session);
-            return CreatedAtAction(nameof(GetSession), new { id = session.Id }, session);
+            try
+            {
+                await _sessionRepository.AddSessionAsync(session);
+                return CreatedAtAction(nameof(GetSession), new { id = session.Id }, session);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateSession(int id, Session session)
         {
-            if (id != session.Id)
+            if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
-            await _sessionRepository.UpdateSessionAsync(session);
-            return NoContent();
+            try
+            {
+                if (id != session.Id)
+                {
+                    return BadRequest();
+                }
+                await _sessionRepository.UpdateSessionAsync(session);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteSession(int id)
         {
-            await _sessionRepository.DeleteSessionAsync(id);
-            return NoContent();
+            try
+            {
+                await _sessionRepository.DeleteSessionAsync(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
     }
 }

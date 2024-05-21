@@ -16,12 +16,18 @@ namespace SoftServe_Practice.Repositories
 
         public async Task<IEnumerable<TicketPrice>> GetTicketPricesAsync()
         {
-            return await _context.TicketPrices.ToListAsync();
+            return await _context.TicketPrices
+                .Include(tp => tp.SessionTicketPrices)
+                .ThenInclude(stp => stp.Session)
+                .ToListAsync();
         }
 
         public async Task<TicketPrice> GetTicketPriceByIdAsync(int id)
         {
-            return await _context.TicketPrices.FindAsync(id);
+            return await _context.TicketPrices
+                .Include(tp => tp.SessionTicketPrices)
+                .ThenInclude(stp => stp.Session)
+                .FirstOrDefaultAsync(tp => tp.Id == id);
         }
 
         public async Task AddTicketPriceAsync(TicketPrice ticketPrice)

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SoftServe_Practice.Data;
 
@@ -11,9 +12,11 @@ using SoftServe_Practice.Data;
 namespace SoftServe_Practice.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240521143948_UpdatedColumns")]
+    partial class UpdatedColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,26 +73,14 @@ namespace SoftServe_Practice.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<decimal>("TicketPrice")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("MovieId");
 
                     b.ToTable("Sessions");
-                });
-
-            modelBuilder.Entity("SoftServe_Practice.Models.SessionTicketPrice", b =>
-                {
-                    b.Property<int>("SessionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TicketPriceId")
-                        .HasColumnType("int");
-
-                    b.HasKey("SessionId", "TicketPriceId");
-
-                    b.HasIndex("TicketPriceId");
-
-                    b.ToTable("SessionTicketPrices");
                 });
 
             modelBuilder.Entity("SoftServe_Practice.Models.TicketPrice", b =>
@@ -116,46 +107,12 @@ namespace SoftServe_Practice.Migrations
             modelBuilder.Entity("SoftServe_Practice.Models.Session", b =>
                 {
                     b.HasOne("SoftServe_Practice.Models.Movie", "Movie")
-                        .WithMany("Sessions")
+                        .WithMany()
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Movie");
-                });
-
-            modelBuilder.Entity("SoftServe_Practice.Models.SessionTicketPrice", b =>
-                {
-                    b.HasOne("SoftServe_Practice.Models.Session", "Session")
-                        .WithMany("SessionTicketPrices")
-                        .HasForeignKey("SessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SoftServe_Practice.Models.TicketPrice", "TicketPrice")
-                        .WithMany("SessionTicketPrices")
-                        .HasForeignKey("TicketPriceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Session");
-
-                    b.Navigation("TicketPrice");
-                });
-
-            modelBuilder.Entity("SoftServe_Practice.Models.Movie", b =>
-                {
-                    b.Navigation("Sessions");
-                });
-
-            modelBuilder.Entity("SoftServe_Practice.Models.Session", b =>
-                {
-                    b.Navigation("SessionTicketPrices");
-                });
-
-            modelBuilder.Entity("SoftServe_Practice.Models.TicketPrice", b =>
-                {
-                    b.Navigation("SessionTicketPrices");
                 });
 #pragma warning restore 612, 618
         }

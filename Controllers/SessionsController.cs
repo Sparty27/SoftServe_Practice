@@ -15,7 +15,7 @@ namespace SoftServe_Practice.Controllers
             _sessionRepository = sessionRepository;
         }
 
-        [HttpGet]
+        [HttpGet("GetAllSessions")]
         public async Task<ActionResult<IEnumerable<Session>>> GetSessions()
         {
             try
@@ -29,7 +29,7 @@ namespace SoftServe_Practice.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("GetSessionById")]
         public async Task<ActionResult<Session>> GetSession(int id)
         {
             try
@@ -47,8 +47,8 @@ namespace SoftServe_Practice.Controllers
             }
         }
 
-        [HttpGet("filter")]
-        public async Task<ActionResult<IEnumerable<Session>>> GetSessionsByFilter([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] string genre)
+        [HttpGet("Filter")]
+        public async Task<ActionResult<IEnumerable<Session>>> GetSessionsByFilter([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] string? genre)
         {
             var sessions = await _sessionRepository.GetSessionsByFilterAsync(startDate, endDate, genre);
             return Ok(sessions);
@@ -68,7 +68,7 @@ namespace SoftServe_Practice.Controllers
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("UpdateSession")]
         public async Task<ActionResult> UpdateSession(int id, Session session)
         {
             if (!ModelState.IsValid)
@@ -82,7 +82,7 @@ namespace SoftServe_Practice.Controllers
                     return BadRequest();
                 }
                 await _sessionRepository.UpdateSessionAsync(session);
-                return NoContent();
+                return Ok(session);
             }
             catch (Exception ex)
             {
@@ -90,7 +90,7 @@ namespace SoftServe_Practice.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("DeleteSession")]
         public async Task<ActionResult> DeleteSession(int id)
         {
             try

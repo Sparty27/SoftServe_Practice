@@ -15,14 +15,14 @@ namespace SoftServe_Practice.Controllers
             _ticketPriceRepository = ticketPriceRepository;
         }
 
-        [HttpGet]
+        [HttpGet("GetAllTicketPrices")]
         public async Task<ActionResult<IEnumerable<TicketPrice>>> GetTicketPrices()
         {
             var ticketPrices = await _ticketPriceRepository.GetTicketPricesAsync();
             return Ok(ticketPrices);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("GetTicketPriceById")]
         public async Task<ActionResult<TicketPrice>> GetTicketPrice(int id)
         {
             var ticketPrice = await _ticketPriceRepository.GetTicketPriceByIdAsync(id);
@@ -44,7 +44,7 @@ namespace SoftServe_Practice.Controllers
             return CreatedAtAction(nameof(GetTicketPrice), new { id = ticketPrice.Id }, ticketPrice);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("UpdateTicketPrice")]
         public async Task<ActionResult> UpdateTicketPrice(int id, TicketPrice ticketPrice)
         {
             if (!ModelState.IsValid)
@@ -59,7 +59,7 @@ namespace SoftServe_Practice.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("DeleteTicketPrice")]
         public async Task<ActionResult> DeleteTicketPrice(int id)
         {
             await _ticketPriceRepository.DeleteTicketPriceAsync(id);

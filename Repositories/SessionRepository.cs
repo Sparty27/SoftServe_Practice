@@ -54,7 +54,7 @@ namespace SoftServe_Practice.Repositories
             }
         }
 
-        public async Task<IEnumerable<Session>> GetSessionsByFilterAsync(DateTime? startDate, DateTime? endDate, string genre)
+        public async Task<IEnumerable<Session>> GetSessionsByFilterAsync(DateTime? startDate, DateTime? endDate, string? genre)
         {
             var query = _context.Sessions
                 .Include(s => s.Movie)
@@ -69,7 +69,7 @@ namespace SoftServe_Practice.Repositories
 
             if (endDate.HasValue)
             {
-                query = query.Where(s => s.StartTime <= endDate.Value);
+                query = query.Where(s => s.StartTime <= endDate.Value.AddDays(1));
             }
 
             if (!string.IsNullOrEmpty(genre))

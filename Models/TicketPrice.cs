@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace SoftServe_Practice.Models
 {
@@ -16,6 +17,7 @@ namespace SoftServe_Practice.Models
         public decimal Price { get; set; }
 
         [ValidateNever]
+        [JsonIgnore]
         public ICollection<SessionTicketPrice> SessionTicketPrices { get; set; }
     }
 }
